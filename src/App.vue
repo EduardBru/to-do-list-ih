@@ -1,40 +1,36 @@
 <template>
-  <section>
-    <router-view class="app-main" /> <!-- your routes will load inside of these tags -->    
-  </section>
+  <nav v-if="user !== null">
+   <router-link to="/">Home</router-link>
+   </nav>
+  <router-view/> <!-- your routes will load inside of these tags -->
 </template>
- 
+
 <script >
 import userStore from '@/store/user';
-import {mapState, mapActions} from 'pinia';
+import { mapState, mapActions } from 'pinia';
 
 export default {
   name: 'App',
   computed: {
-    ...mapState(userStore, )
+    ...mapState(userStore, ['user']),
   },
-  
-}
-
-
- 
-const router = useRouter()
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
- 
-onMounted(async () => {
-  try {
-    await userStore.fetchUser() // here we call fetch user
-    if (!user.value) {
+  methods: {
+    ...mapActions(userStore, ['fetchUser']),
+  },
+  async created() {
+    try {
+      await this.fetchUser(); // here we call fetch user
+      console.log(this.user);
+      if (!this.user) {
       // redirect them to logout if the user is not there
-      router.push({ path: '/auth' });
-    } else {
+        this.$router.push({ path: '/auth' });
+      } else {
       // continue to dashboard
-      router.push({ path: '/' });
+        this.$router.push({ path: '/' });
+      }
+    } catch (e) {
+      console.log(e);
     }
-  } catch (e) {
-    console.log(e)
-  }
-})
+  },
+};
 </script>
- 
