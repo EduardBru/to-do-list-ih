@@ -1,17 +1,20 @@
 <template>
   <div class="home">
   <h1>prueba</h1>
+  <taskJobs></taskJobs>
   <button @click="handleSignOut">Sign Out </button>
+
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'pinia';
 import userStore from '@/store/user';// @ is an alias to /src
+import taskJobs from '@/components/TaskJobs.vue';
 
 export default {
   name: 'HomeView',
-  components: { },
+  components: { taskJobs },
   computed: {
     ...mapState(userStore, ['user']),
   },
