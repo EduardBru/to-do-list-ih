@@ -5,6 +5,7 @@ export default defineStore('tasks', {
   state: () => ({
     taskCreated: null,
     tasks: [],
+    subtasks: [],
     states: [],
   }),
   actions: {
@@ -20,7 +21,6 @@ export default defineStore('tasks', {
         .select('*')
         .order('id', { ascending: true });
       this.tasks = data;
-      // si tiene subtasks, recuperarlas
     },
     async createTask(task) {
       const { data, error } = await supabase
@@ -36,8 +36,8 @@ export default defineStore('tasks', {
       const updatedTask = this.tasks[updatedTaskId];
       const { data, error } = await supabase
         .from('tasks')
-        // eslint-disable-next-line max-len
-        .update({ title: updatedTask.title, estimate: updatedTask.estimate, state: updatedTask.state })
+        // eslint-disable-next-line max-len, object-curly-newline
+        .update({ title: updatedTask.title, estimate: updatedTask.estimate, state: updatedTask.state, subtasks: updatedTask.subtasks })
         .match({ id: taskId });
       if (error) throw error;
       else {
@@ -55,6 +55,30 @@ export default defineStore('tasks', {
         this.tasks.splice(removeIndex, 1);
         console.log(removeIndex);
       }
+    },
+    async createSubTask(subtask, taskId) {
+      const { data, error } = await supabase
+        .from('subtasks')
+        .insert(subtask);
+      if (error) throw error;
+      else {
+        this.subtasks.push(data[0]);
+        console.log('cosa cosa cosa', typeof data[0].id);
+        const taskToAddIndex = this.tasks.map((item) => item.id).indexOf(taskId);
+        if ((this.tasks[taskToAddIndex].subtasks) === null) {
+          this.tasks[taskToAddIndex].subtasks = [];
+        }
+        this.tasks[taskToAddIndex].subtasks.push(data[0].id);
+        console.log(this.tasks[taskToAddIndex]);
+        await this.updateTask(taskId);
+      }
+    },
+    async fetchSubTasks() {
+      const { data } = await supabase
+        .from('subtasks')
+        .select('*')
+        .order('id', { ascending: true });
+      this.subtasks = data;
     },
   },
 });
