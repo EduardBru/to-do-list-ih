@@ -1,7 +1,7 @@
 <template>
   <div class="home">
   <h1>prueba</h1>
-  <taskJobs></taskJobs>
+  <kanbanJobs></kanbanJobs>
   <button @click="handleSignOut">Sign Out </button>
 
   </div>
@@ -10,11 +10,11 @@
 <script>
 import { mapState, mapActions } from 'pinia';
 import userStore from '@/store/user';// @ is an alias to /src
-import taskJobs from '@/components/TaskJobs.vue';
+import kanbanJobs from '@/components/KanbanJobs.vue';
 
 export default {
   name: 'HomeView',
-  components: { taskJobs },
+  components: { kanbanJobs },
   computed: {
     ...mapState(userStore, ['user']),
   },

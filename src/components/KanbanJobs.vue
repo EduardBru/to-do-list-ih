@@ -1,40 +1,16 @@
 <!-- eslint-disable vuejs-accessibility/form-control-has-label -->
 <!-- eslint-disable vuejs-accessibility/label-has-for
-  Esto es un componente que carga las tareas, habra otro que las represente
+  Esto es un componente que carga las tareas y dibuja la tabla de kanban
 -->
 <template>
-    <div>task components incoming</div>
-    <div v-for="item in tasks" :key="item.id" >
-      <form  @submit.prevent="handleUpdateTask(item.id)" >
-        Task:
-        <input v-model="item.title" placeholder="item.title" class="task_data">
-        <input v-model.number="item.estimate" placeholder="Insert" type="number" class="task_data">
-        <select v-model="item.state" placeholder="item.state" class="task_data">
-          <option v-for="state in states" v-bind:value="state" :key="state">
-          {{ state }}
-          </option>
-        </select>
-        Plan Estimate:  {{item.estimate}}
-        Status:  {{item.state}}
-        <div v-for="subitem in item.subtasks" :key="subitem">
-          <!-- Me tengo que plantear que esto no sea un método sino que
-            almacene algun tipo de variable o algo
-          Esto hay que modificarlo, y no es trivial-->
-          {{getSubtaskById(subitem)[0].subtask_name}}
-          {{getSubtaskById(subitem)[0].is_completed}}
-        </div>
-        <input type="submit" value="Update Task">
-      </form>
-      <button @click="handleDeleteTask(item.id)">DeleteTask </button>
-      <div>
-          <form  @submit.prevent="handleCreateSubTask(item.id)" >
-            <label for="title">Title</label>
-            <input name="title" v-model="subTaskObject.subtask_name"
-            placeholder="Insert your subtask name here">
-            <input type="submit" value="Create SubTask">
-         </form>
+  <h1>Kanban Table</h1>
+  <div class="kanban_container">
+    <div v-for="state in states" :key="state" class="state-column">
+      <div v-for="item in tasks" :key="item.id" >
+        <taskComp :taskProp = "item" v-if="state === item.state"></taskComp>
       </div>
     </div>
+  </div>
     <form  @submit.prevent="handleCreateTask" >
       <div>
         <label for="title">Title</label>
@@ -59,6 +35,7 @@
 import { mapState, mapActions } from 'pinia';
 import userStore from '@/store/user';
 import taskStore from '@/store/task';
+import taskComp from './TaskComp.vue';
 
 const defaultData = {
   title: '',
@@ -66,15 +43,17 @@ const defaultData = {
   state: 'To Do',
   user_id: '',
 };
+const defaultSubTask = {
+  subtask_name: '',
+  is_completed: false,
+};
 export default {
-  name: 'TasksJobs',
-  components: { },
+  name: 'kanbanJobs',
+  components: { taskComp },
   data() {
     return {
       subTaskObject: {
-        user_id: '',
         subtask_name: '',
-        task: '',
         is_completed: false,
       },
       selectedState: '',
@@ -100,28 +79,28 @@ export default {
       this.taskObject = { ...defaultData };
     },
     handleDeleteTask(taskId) {
-      console.log(taskId);
       this.deleteTask(taskId);
     },
     handleUpdateTask(taskId) {
-      console.log(taskId);
       this.updateTask(taskId);
     },
     handleCreateSubTask(taskId) {
       this.subTaskObject.user_id = this.user.id;
       this.subTaskObject.task = taskId;
-      console.log(this.subTaskObject);
       this.createSubTask(this.subTaskObject, taskId);
+      this.subTaskObject = { ...defaultSubTask };
     },
     getSubtaskById(subtaskId) {
-      return this.subtasks.filter((subtask) => subtask.id === subtaskId);
+      const localSubtask = this.subtasks.filter((subtask) => subtask.id === subtaskId);
+      this.subTaskObject.subtask_name = localSubtask[0].subtask_name;
+      this.subTaskObject.is_completed = localSubtask[0].is_completed;
+      return localSubtask;
     },
   },
   async created() {
     try {
       await this.fetchTasks(); // here we call fetch user
       await this.fetchStates(); // here we call fetch states
-      await this.fetchSubTasks(); // here we call fetch subtasks
     } catch (e) {
       console.log(e);
     }
@@ -133,5 +112,16 @@ export default {
   .task_data{
     border: 0px;
     width: 200px;
+  }
+  .kanban_container{
+    display: flex;
+    flex-direction: row;
+    align-items:stretch;
+    justify-content:space-between;
+    width: 100vw;
+  }
+  .state-column{
+    width: 400px;
+    border: 3px solid grey;
   }
 </style>
