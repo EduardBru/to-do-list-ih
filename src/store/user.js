@@ -42,6 +42,12 @@ export default defineStore('user', {
       if (error) throw error;
       else this.user = null;
     },
+    async createState(stateData) {
+      console.log(stateData);
+    },
+    async modifyState(stateData) {
+      console.log(stateData);
+    },
   },
   persist: {
     enabled: true,

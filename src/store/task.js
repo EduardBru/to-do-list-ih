@@ -45,15 +45,24 @@ export default defineStore('tasks', {
     },
     async deleteTask(taskId) {
       // eslint-disable-next-line no-plusplus
-      if (this.tasks.filter((task) => task.id === taskId)[0].subtasks !== null) {
-        this.tasks.filter((task) => task.id === taskId)[0].subtasks.forEach(async (element) => {
-          await this.deleteSubTask(taskId, element.id);
+      const subtaksOfTask = this.tasks.filter((task) => task.id === taskId)[0].subtasks;
+      if (subtaksOfTask.length) {
+        const promises = [];
+        subtaksOfTask.forEach((element) => {
+          const deleteSubtaskProm = this.deleteSubTask(taskId, element.id);
+          promises.push(deleteSubtaskProm);
           console.log('elementos', element.id);
         });
+        Promise.all(promises).then(async () => {
+          this.deleteFinalTask(taskId);
+        }).catch((error) => {
+          console.log(error);
+        });
+      } else {
+        this.deleteFinalTask(taskId);
       }
-      // SE ME QUEDA PILLADO DICIENDO QUE NO HA ELIMINADO LAS SUBTAREAS;
-      // NO SE COMO HACER PARA QUE ESPERE ANTES DE LANZAR LA QUERY SIGUIENTE
-      // Si se ha quedado aqui loco luego hago un create subtask y no tira
+    },
+    async deleteFinalTask(taskId) {
       const { error } = await supabase
         .from('tasks')
         .delete()
@@ -96,10 +105,17 @@ export default defineStore('tasks', {
         const taskIndex = this.tasks.map((item) => item.id).indexOf(taskId);
         // eslint-disable-next-line max-len
         const subtaskIndex = this.tasks[taskIndex].subtasks.map((item) => item.id).indexOf(subtaskId);
-        console.log(subtaskIndex);
         this.tasks[taskIndex].subtasks.splice(subtaskIndex, 1);
         await this.updateTaskSubtask(subtaskId, taskId, taskIndex);
       }
+    },
+    async updateSubTask(subtaskId, subtaskData) {
+      const { error } = await supabase
+        .from('subtasks')
+        // eslint-disable-next-line max-len, object-curly-newline
+        .update({ subtask_name: subtaskData.subtask_name, is_completed: subtaskData.is_completed })
+        .match({ id: subtaskId });
+      if (error) throw error;
     },
     // async fetchSubTasks() {
     //   const { data } = await supabase

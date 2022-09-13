@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-  <h1>prueba</h1>
+  <h1>IronKanban</h1>
   <kanbanJobs></kanbanJobs>
   <button @click="handleSignOut">Sign Out </button>
 

@@ -1,10 +1,12 @@
 <!-- eslint-disable vuejs-accessibility/form-control-has-label -->
 <!-- eslint-disable vuejs-accessibility/label-has-for
-  Representacion de cada tarea con sus subtareas
+ Task and subtasks go here
+ Pasar una prop y hacer get task by Id en el created y asi simplificar
+ mucho el codigo y evitar pasar props grandes
+ IDEA HACER LOS BOTONES DE MODIFICAR INVISIBLE Y SUSTITUIR LOS CREATE POR UN +
 -->
 <template>
-    subtasks go here
-   <form  @submit.prevent="handleUpdateTask(taskProp.id)" >
+     <form  @submit.prevent="handleUpdateTask(taskProp.id)" >
         Task:
         <input v-model="taskObject.title" placeholder="taskObject.title" class="task_data">
         <input v-model.number="taskObject.estimate"
@@ -18,10 +20,15 @@
         Status:  {{taskObject.state}}
         <input type="submit" value="Update Task">
       </form>
-      <div v-for="subitem in taskObject.subtasks" :key="subitem.id">
-          {{subitem.subtask_name}}
-          {{subitem.is_completed}}
+      <div v-for="subitem in taskProp.subtasks" :key="subitem.id">
+        <form  @submit.prevent="handleUpdateSubTask(subitem.id, subitem)" >
+            <input name="title" v-model="subitem.subtask_name"
+            placeholder="Insert SubTask">
+           <input name="is_completed" type="checkbox" v-model="subitem.is_completed"
+            placeholder="subitem.is_completed">
+            <input type="submit" value="Update Subtask">
           <button @click="handleDeleteSubTask(taskObject.id, subitem.id)">Delete Sub Task </button>
+        </form>
       </div>
       <button @click="handleDeleteTask(taskObject.id)">DeleteTask </button>
       <div>
@@ -52,7 +59,6 @@ export default {
         is_completed: false,
       },
       selectedState: '',
-      // listOfSubtasks: [],
       taskObject: {},
     };
   },
@@ -64,15 +70,13 @@ export default {
     ...mapState(userStore, ['user']),
   },
   methods: {
-    ...mapActions(taskStore, ['deleteTask', 'updateTask', 'createSubTask', 'fetchSubTasks', 'deleteSubTask']),
+    ...mapActions(taskStore, ['deleteTask', 'updateTask', 'createSubTask', 'fetchSubTasks', 'deleteSubTask', 'updateSubTask']),
     handleDeleteTask(taskId) {
       this.deleteTask(taskId);
     },
     handleUpdateTask(taskId) {
-      const updatedTaskId = this.tasks.map((item) => item.id).indexOf(taskId);
+      // const updatedTaskId = this.tasks.map((item) => item.id).indexOf(taskId);
       // this.tasks[updatedTaskId] = { ...this.taskObject };
-      console.log(this.taskObject);
-      console.log(this.tasks[updatedTaskId]);
       this.updateTask(taskId, this.taskObject);
     },
     handleCreateSubTask(taskId) {
@@ -81,17 +85,21 @@ export default {
       this.createSubTask(this.subTaskObject, taskId);
       this.subTaskObject = { ...defaultSubTask };
     },
-    getSubtaskById(subtaskId) {
-      if (typeof subtaskId === 'number') {
-        const localSubtask = this.subtasks.filter((subtask) => subtask.id === subtaskId);
-        this.subTaskObject.subtask_name = localSubtask[0].subtask_name;
-        this.subTaskObject.is_completed = localSubtask[0].is_completed;
-        return localSubtask;
-      }
-      return null;
-    },
+    // getSubtaskById(subtaskId) {
+    //   if (typeof subtaskId === 'number') {
+    //     const localSubtask = this.subtasks.filter((subtask) => subtask.id === subtaskId);
+    //     this.subTaskObject.subtask_name = localSubtask[0].subtask_name;
+    //     this.subTaskObject.is_completed = localSubtask[0].is_completed;
+    //     console.log(localSubtask);
+    //     return localSubtask;
+    //   }
+    //   return null;
+    // },
     handleDeleteSubTask(taskId, subtaskId) {
       this.deleteSubTask(taskId, subtaskId);
+    },
+    handleUpdateSubTask(subtaskId, subtaskData) {
+      this.updateSubTask(subtaskId, subtaskData);
     },
   },
   async created() {

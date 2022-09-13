@@ -1,13 +1,20 @@
 <!-- eslint-disable vuejs-accessibility/form-control-has-label -->
 <!-- eslint-disable vuejs-accessibility/label-has-for
   Esto es un componente que carga las tareas y dibuja la tabla de kanban
+  crear componente kanban column
+  crear un getTasksBy State que te devuelva solo las tareas que tienen ese estado un getter,
+   que no se como se hacen
 -->
 <template>
-  <h1>Kanban Table</h1>
-  <div class="kanban_container">
-    <div v-for="state in states" :key="state" class="state-column">
+   <div class="kanban_container">
+    <div v-for="stateData in states" :key="stateData" class="state-column">
+      <form  @submit.prevent="handleModifyState(stateData, stateName)">
+        <input v-model = "stateName" placeholder= "stateData" class="task_data">
+        <input type="submit" value="Update">
+      </form>
+      <h2>{{stateData}}</h2>
       <div v-for="item in tasks" :key="item.id" >
-        <taskComp :taskProp = "item" v-if="state === item.state"></taskComp>
+        <taskComp :taskProp = "item" v-if="stateData === item.state"></taskComp>
       </div>
     </div>
   </div>
@@ -43,19 +50,11 @@ const defaultData = {
   state: 'To Do',
   user_id: '',
 };
-const defaultSubTask = {
-  subtask_name: '',
-  is_completed: false,
-};
 export default {
   name: 'kanbanJobs',
   components: { taskComp },
   data() {
     return {
-      subTaskObject: {
-        subtask_name: '',
-        is_completed: false,
-      },
       selectedState: '',
       taskObject: {
         title: '',
@@ -64,7 +63,8 @@ export default {
         user_id: '',
         subtasks: [],
       },
-      listOfSubtasks: [],
+      listOfStates: [],
+      listOfStateObjects: [],
     };
   },
   computed: {
@@ -72,29 +72,16 @@ export default {
     ...mapState(userStore, ['user']),
   },
   methods: {
-    ...mapActions(taskStore, ['fetchTasks', 'createTask', 'deleteTask', 'fetchStates', 'updateTask', 'createSubTask', 'fetchSubTasks']),
+    ...mapActions(taskStore, ['fetchTasks', 'createTask', 'fetchStates']),
+    ...mapActions(userStore, ['modifyState', 'createState']),
     handleCreateTask() {
       this.taskObject.user_id = this.user.id;
       this.createTask(this.taskObject);
       this.taskObject = { ...defaultData };
     },
-    handleDeleteTask(taskId) {
-      this.deleteTask(taskId);
-    },
-    handleUpdateTask(taskId) {
-      this.updateTask(taskId);
-    },
-    handleCreateSubTask(taskId) {
-      this.subTaskObject.user_id = this.user.id;
-      this.subTaskObject.task = taskId;
-      this.createSubTask(this.subTaskObject, taskId);
-      this.subTaskObject = { ...defaultSubTask };
-    },
-    getSubtaskById(subtaskId) {
-      const localSubtask = this.subtasks.filter((subtask) => subtask.id === subtaskId);
-      this.subTaskObject.subtask_name = localSubtask[0].subtask_name;
-      this.subTaskObject.is_completed = localSubtask[0].is_completed;
-      return localSubtask;
+    handleModifyState(stateIn, stateOut) {
+      console.log(stateIn, stateOut);
+      this.modifyState();
     },
   },
   async created() {
@@ -104,6 +91,15 @@ export default {
     } catch (e) {
       console.log(e);
     }
+    this.listOfstates = this.states;
+    // pedir ayuda!!
+    console.log(this.states.array);
+    Object.keys(this.states).foreach((element) => {
+      const i = 0;
+      const currentState = { id: i, name: element };
+      this.listOfStates.push(currentState);
+    });
+    console.log(this.listOfStates);
   },
 };
 </script>
