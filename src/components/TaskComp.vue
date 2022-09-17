@@ -6,21 +6,22 @@
  IDEA HACER LOS BOTONES DE MODIFICAR INVISIBLE Y SUSTITUIR LOS CREATE POR UN +
 -->
 <template>
-     <form  @submit.prevent="handleUpdateTask(taskProp.id)" >
+     <form  @submit.prevent="handleUpdateTask(taskObject.id)" >
         Task:
-        <input v-model="taskObject.title" placeholder="taskObject.title" class="task_data">
+        <input v-model="taskObject.title" :placeholder="taskObject.title" class="task_data">
         <input v-model.number="taskObject.estimate"
         placeholder="Insert" type="number" class="task_data">
-        <select v-model="taskObject.state" placeholder="taskObject.state" class="task_data">
-          <option v-for="state in states" v-bind:value="state" :key="state">
+        <select v-model="taskObject.state"  class="task_data">
+          <option v-for="(state, index) in states" v-bind:value="index"
+          :placeholder="state" :key="state" >
           {{ state }}
           </option>
         </select>
         Plan Estimate:  {{taskObject.estimate}}
-        Status:  {{taskObject.state}}
+        Status:  {{states[taskObject.state]}}
         <input type="submit" value="Update Task">
       </form>
-      <div v-for="subitem in taskProp.subtasks" :key="subitem.id">
+      <div v-for="subitem in taskObject.subtasks" :key="subitem.id">
         <form  @submit.prevent="handleUpdateSubTask(subitem.id, subitem)" >
             <input name="title" v-model="subitem.subtask_name"
             placeholder="Insert SubTask">
@@ -50,7 +51,7 @@ const defaultSubTask = {
   is_completed: false,
 };
 export default {
-  name: 'tasmComp',
+  name: 'taskComp',
   components: { },
   data() {
     return {
@@ -63,20 +64,18 @@ export default {
     };
   },
   props: {
-    taskProp: Object,
+    taskId: Number,
   },
   computed: {
-    ...mapState(taskStore, ['tasks', 'states']),
-    ...mapState(userStore, ['user']),
+    ...mapState(taskStore, ['tasks']),
+    ...mapState(userStore, ['user', 'states']),
   },
   methods: {
-    ...mapActions(taskStore, ['deleteTask', 'updateTask', 'createSubTask', 'fetchSubTasks', 'deleteSubTask', 'updateSubTask']),
+    ...mapActions(taskStore, ['deleteTask', 'updateTask', 'createSubTask', 'fetchSubTasks', 'deleteSubTask', 'updateSubTask', 'getTaskById']),
     handleDeleteTask(taskId) {
       this.deleteTask(taskId);
     },
     handleUpdateTask(taskId) {
-      // const updatedTaskId = this.tasks.map((item) => item.id).indexOf(taskId);
-      // this.tasks[updatedTaskId] = { ...this.taskObject };
       this.updateTask(taskId, this.taskObject);
     },
     handleCreateSubTask(taskId) {
@@ -108,7 +107,7 @@ export default {
     } catch (e) {
       console.log(e);
     }
-    this.taskObject = { ...this.taskProp };
+    this.taskObject = { ...this.getTaskById(this.taskId)[0] };
   },
 };
 </script>

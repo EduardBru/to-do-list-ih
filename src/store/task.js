@@ -6,15 +6,9 @@ export default defineStore('tasks', {
     taskCreated: null,
     tasks: [],
     subtasks: [],
-    states: [],
   }),
+
   actions: {
-    async fetchStates() {
-      const { data } = await supabase
-        .from('user_config')
-        .select('states');
-      this.states = data[0].states;
-    },
     async fetchTasks() {
       const { data } = await supabase
         .from('tasks')
@@ -34,7 +28,6 @@ export default defineStore('tasks', {
     async updateTask(taskId, task) {
       const { data, error } = await supabase
         .from('tasks')
-        // eslint-disable-next-line max-len, object-curly-newline
         .update({ title: task.title, estimate: task.estimate, state: task.state })
         .match({ id: taskId });
       if (error) throw error;
@@ -44,14 +37,13 @@ export default defineStore('tasks', {
       }
     },
     async deleteTask(taskId) {
-      // eslint-disable-next-line no-plusplus
       const subtaksOfTask = this.tasks.filter((task) => task.id === taskId)[0].subtasks;
       if (subtaksOfTask.length) {
         const promises = [];
         subtaksOfTask.forEach((element) => {
           const deleteSubtaskProm = this.deleteSubTask(taskId, element.id);
           promises.push(deleteSubtaskProm);
-          console.log('elementos', element.id);
+          // console.log('elementos', element.id);
         });
         Promise.all(promises).then(async () => {
           this.deleteFinalTask(taskId);
@@ -116,6 +108,19 @@ export default defineStore('tasks', {
         .update({ subtask_name: subtaskData.subtask_name, is_completed: subtaskData.is_completed })
         .match({ id: subtaskId });
       if (error) throw error;
+    },
+    getTaskById(taskId) {
+      return this.tasks.filter((item) => item.id === taskId);
+    },
+    async updateTasksWhenDeleteingState(stateId) {
+      this.tasks.forEach((element) => {
+        if (element.state > stateId) {
+          const disposableTask = element;
+          disposableTask.state -= 1;
+          this.updateTask(element.id, disposableTask);
+          console.log('task state updated from', element.state, 'to', disposableTask.state);
+        }
+      });
     },
     // async fetchSubTasks() {
     //   const { data } = await supabase

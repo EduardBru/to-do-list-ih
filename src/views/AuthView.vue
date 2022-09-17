@@ -55,7 +55,7 @@ export default {
     handleSignUp() {
       //   const userData = {
       //   mail: 'ebrudomingo@gmail.com',
-      // pass: '1234567',
+      // pass: '123456',
       // };
       this.signUp(this.email, this.password);
     },
