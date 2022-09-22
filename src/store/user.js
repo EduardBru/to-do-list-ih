@@ -28,7 +28,11 @@ export default defineStore('user', {
         email,
         password,
       });
-      if (error) throw error;
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+
       if (user) {
         this.user = user;
         await this.createUserConfig();
@@ -40,7 +44,11 @@ export default defineStore('user', {
         email,
         password,
       });
-      if (error) throw error;
+      if (error) {
+        console.log('problemitaaaa');
+        console.log(error.message);
+        throw error;
+      }
       if (user) this.user = user;
     },
     async signOut() {

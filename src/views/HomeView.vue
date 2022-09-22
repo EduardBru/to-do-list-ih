@@ -1,10 +1,14 @@
 <template>
-  <div class="home">
-  <h1>IronKanban</h1>
-  <kanbanJobs></kanbanJobs>
-  <button @click="handleSignOut">Sign Out </button>
-
+  <div class= "navbar">
+    <div>
+      <h1>IronKanban</h1>
+    </div>
+    <div class="homebtn">
+    <button @click="handleSignOut" class="signout-button">Sign Out </button>
   </div>
+  </div>
+  <div class="home">
+   <kanbanJobs class= "container1"></kanbanJobs>  </div>
 </template>
 
 <script>
@@ -34,3 +38,50 @@ export default {
   },
 };
 </script>
+<style>
+.home {
+  margin-left: 80px;
+}
+.navbar {
+ position:absolute;
+ top: 0px;
+ width: 100%;
+/* margin-left: 50px; */
+ height: 50px;
+ background-color: #2DC5FA;
+ z-index: 289;
+ display: flex;
+ flex-direction: row;
+ flex-wrap: wrap;
+ justify-content: space-between;
+
+}
+.navbar div{
+  color: white;
+  height: 100%;
+  width: 50%;
+  min-width: 150px;
+}
+.navbar div h1{
+  margin: 0px 0px 0px 50px;
+}
+.homebtn{
+  display: flex;
+  justify-content: flex-end;
+}
+.signout-button{
+  color: white;
+  background-color: #666;
+  height: 50px;
+  width: 30%;
+  min-width: 100px;
+  font-size: 24px;
+  border: 0px;
+  margin-top: -8px;
+}
+.container1{
+  width: 100%;
+  position: relative;
+  top: -150px;
+ }
+</style>

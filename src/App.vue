@@ -1,6 +1,6 @@
 <template>
   <nav v-if="user !== null">
-   <router-link to="/">Home</router-link>
+   <router-link to="/"></router-link>
    </nav>
   <router-view/> <!-- your routes will load inside of these tags -->
 </template>
