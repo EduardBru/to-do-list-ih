@@ -1,8 +1,10 @@
 <template>
+  <div class="back-ground">
   <nav v-if="user !== null">
    <router-link to="/"></router-link>
    </nav>
   <router-view/> <!-- your routes will load inside of these tags -->
+</div>
 </template>
 
 <script >
@@ -34,3 +36,16 @@ export default {
   },
 };
 </script>
+
+<style>
+.back-ground{
+  width: 100vw;
+  height: 100vh;
+  margin-top: 100px;
+  background-size: cover;
+  background-image: url("https://cdn-images-1.medium.com/max/1200/1*69RcxrWXuk385lSxkIYYLA.png");
+  background-position: fixed;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+</style>

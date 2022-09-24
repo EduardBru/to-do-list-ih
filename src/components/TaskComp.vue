@@ -1,3 +1,4 @@
+<!-- eslint-disable max-len -->
 <!-- eslint-disable vuejs-accessibility/form-control-has-label -->
 <!-- eslint-disable vuejs-accessibility/label-has-for
  Task and subtasks go here
@@ -6,42 +7,102 @@
  IDEA HACER LOS BOTONES DE MODIFICAR INVISIBLE Y SUSTITUIR LOS CREATE POR UN +
 -->
 <template>
-   <div class="card card-border-primary">
-      <div class="card-header">
-     <form  @submit.prevent="handleUpdateTask(taskObject.id)" >
-        Task:
-        <input v-model="taskObject.title" :placeholder="taskObject.title" class="task_data">
-        <input v-model.number="taskObject.estimate"
-        placeholder="Insert" type="number" class="task_data">
-        <select v-model="taskObject.state"  class="task_data">
-          <option v-for="(state, index) in states" v-bind:value="index"
-          :placeholder="state" :key="state" >
-          {{ state }}
-          </option>
-        </select>
-        Plan Estimate:  {{taskObject.estimate}}
-        Status:  {{states[taskObject.state]}}
-        <input type="submit" value="Update Task">
-      </form>
-      <div v-for="subitem in taskObject.subtasks" :key="subitem.id">
-        <form  @submit.prevent="handleUpdateSubTask(subitem.id, subitem)" >
-            <input name="title" v-model="subitem.subtask_name"
-            placeholder="Insert SubTask">
-           <input name="is_completed" type="checkbox" v-model="subitem.is_completed"
-            placeholder="subitem.is_completed" class="card-actions float-right">
-            <input type="submit" value="Update Subtask">
-          <button @click="handleDeleteSubTask(taskObject.id, subitem.id)">Delete Sub Task </button>
+  <div class="card card-border-primary">
+    <div class="card-header">
+      <div v-if="!editTask" class="task-container">
+        <div class="task-info">
+          <h4>{{ taskObject.title }}</h4>
+          <h6>Estimated effort: {{ taskObject.estimate }}</h6>
+          <h6 v-if="taskObject.subtasks.length">Subtasks:</h6>
+          <div v-for="subitem in taskObject.subtasks" :key="subitem.id" class="subtasks-container">
+            {{ subitem.subtask_name }}
+            <div v-if="!subitem.is_completed">
+              <p class="checkbox1"></p>
+            </div>
+            <div v-else>
+              <p class="checkbox1 clicked">✔</p>
+            </div>
+          </div>
+        </div>
+        <div class="task-icons">
+          <button @click="editTask = !editTask" class="icon-action icon-edit"></button>
+        </div>
+      </div>
+      <div v-else>
+        <div class="class-container">
+          <form @submit.prevent="handleUpdateTask(taskObject.id)" class="editable-task">
+            <div class="task-info">
+              <div>
+                <h5><input v-model="taskObject.title" :placeholder="taskObject.title" /> &zwnj;</h5>
+                <h6>
+                  Estimated effort:
+                  <input
+                    v-model.number="taskObject.estimate"
+                    placeholder="Insert"
+                    type="number"
+                    class="placeholder-small"
+                  />
+                </h6>
+                <h6>
+                  State:
+                  <select v-model="taskObject.state">
+                    <option
+                      v-for="(state, index) in states"
+                      v-bind:value="index"
+                      :placeholder="state"
+                      :key="state"
+                    >
+                      {{ state }}
+                    </option>
+                  </select>
+                </h6>
+              </div>
+            </div>
+            <div class="task-icons">
+              <input type="submit" value=" " class="icon-action icon-save" />
+              <button
+                @click="handleDeleteTask(taskObject.id)"
+                class="icon-action icon-delete"
+              ></button>
+              <button @click="editTask = !editTask" class="icon-action icon-edit"></button>
+            </div>
+          </form>
+        </div>
+        <h6 v-if="taskObject.subtasks.length">Subtasks:</h6>
+        <div class="subtasks-flex">
+          <div
+            v-for="subitem in taskObject.subtasks"
+            :key="subitem.id"
+            class="subtasks-container subtasks-container-two"
+          >
+            <form @submit.prevent="handleUpdateSubTask(subitem.id, subitem)" class="subtasks-form">
+              <div class="subtasks-form-data">
+                <input name="title" v-model="subitem.subtask_name" placeholder="Insert SubTask" />
+                <input
+                  name="is_completed"
+                  type="checkbox"
+                  v-model="subitem.is_completed"
+                  placeholder="subitem.is_completed"
+                  class="card-actions float-right"
+                />
+              </div>
+              <div class="subtasks-form-buttons">
+                <input type="submit" value=" " class="icon-action icon-save" />
+                <button
+                  @click="handleDeleteSubTask(taskObject.id, subitem.id)"
+                  class="icon-action icon-delete"
+                ></button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <br>
+      </div>
+        <form @submit.prevent="handleCreateSubTask(taskObject.id)">
+          <label for="title"></label>
+          <input name="title" v-model="subTaskObject.subtask_name" placeholder="Insert subtask" />
+          <input type="submit" value="Create SubTask" />
         </form>
-      </div>
-      <button @click="handleDeleteTask(taskObject.id)">DeleteTask </button>
-      <div>
-          <form  @submit.prevent="handleCreateSubTask(taskObject.id)" >
-            <label for="title">Title</label>
-            <input name="title" v-model="subTaskObject.subtask_name"
-            placeholder="Insert your subtask name here">
-            <input type="submit" value="Create SubTask">
-         </form>
-      </div>
     </div>
   </div>
 </template>
@@ -56,7 +117,7 @@ const defaultSubTask = {
 };
 export default {
   name: 'taskComp',
-  components: { },
+  components: {},
   data() {
     return {
       subTaskObject: {
@@ -65,6 +126,7 @@ export default {
       },
       selectedState: '',
       taskObject: {},
+      editTask: false,
     };
   },
   props: {
@@ -75,18 +137,29 @@ export default {
     ...mapState(userStore, ['user', 'states']),
   },
   methods: {
-    ...mapActions(taskStore, ['deleteTask', 'updateTask', 'createSubTask', 'fetchSubTasks', 'deleteSubTask', 'updateSubTask', 'getTaskById']),
+    ...mapActions(taskStore, [
+      'deleteTask',
+      'updateTask',
+      'createSubTask',
+      'fetchSubTasks',
+      'deleteSubTask',
+      'updateSubTask',
+      'getTaskById',
+    ]),
     handleDeleteTask(taskId) {
       this.deleteTask(taskId);
+      this.editTask = false;
     },
     handleUpdateTask(taskId) {
       this.updateTask(taskId, this.taskObject);
+      this.editTask = false;
     },
     handleCreateSubTask(taskId) {
       this.subTaskObject.user_id = this.user.id;
       this.subTaskObject.task = taskId;
       this.createSubTask(this.subTaskObject, taskId);
       this.subTaskObject = { ...defaultSubTask };
+      this.editTask = false;
     },
     // getSubtaskById(subtaskId) {
     //   if (typeof subtaskId === 'number') {
@@ -107,7 +180,7 @@ export default {
   },
   async created() {
     try {
-    // await this.fetchSubTasks(); // here we call fetch subtasks
+      // await this.fetchSubTasks(); // here we call fetch subtasks
     } catch (e) {
       console.log(e);
     }
@@ -117,126 +190,86 @@ export default {
 </script>
 
 <style>
-  .task_data{
-    border: 0px;
-    width: 200px;
-  }
-  .card {
-    margin-bottom: 1.5rem;
-    box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .025)
+.task_data {
+  border: 0px;
+  width: 200px;
 }
-
-.card-border-primary {
-    border-top: 4px solid #2979ff;
-    width: 100%;
+.checkbox1 {
+  border: 1px solid black;
+  height: 16px;
+  width: 14px;
+  display: inline-block;
+  font-size: 12px;
 }
-
-.card-border-secondary {
-    border-top: 4px solid #efefef
+.clicked {
+  color: white;
+  background-color: #2dc5fa;
+  border-color: #2dc5fa;
 }
-
-.card-border-success {
-    border-top: 4px solid #00c853
+.active {
+  visibility: visible;
 }
-
-.card-border-info {
-    border-top: 4px solid #3d5afe
+.subtasks-container {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  justify-content: space-between;
+  margin-left: 10%;
+  height: fit-content;
 }
-
-.card-border-warning {
-    border-top: 4px solid #ff9100
+.subtasks-container-two {
+  width: 90%;
 }
-
-.card-border-danger {
-    border-top: 4px solid #ff1744
+.task-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
 }
-
-.card-border-light {
-    border-top: 4px solid #f8f9fa
+.task-info {
+  display: flex;
+  flex-direction: column;
+  width: 287px;
 }
-
-.card-border-dark {
-    border-top: 4px solid #6c757d
+.editable-task {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
-
-.card-header {
-    border-bottom-width: 1px
+.task-icons {
+  display: flex;
+  width: 70px;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 2px;
 }
-
-.card-actions a {
-    color: #495057;
-    text-decoration: none
+.placeholder-small {
+  width: 80px;
 }
-
-.card-actions svg {
-    width: 16px;
-    height: 16px
+.placeholder-medium {
+  width: 180px;
 }
-
-.card-actions .dropdown {
-    line-height: 1.4
+.subtasks-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 }
-
-.card-title {
-    font-weight: 500;
-    margin-top: .1rem
+.subtasks-form-data {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
 }
-
-.card-subtitle {
-    font-weight: 400
+.subtasks-form-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
-
-.card-table {
-    margin-bottom: 0
+.subtasks-flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
 }
-
-.card-table tr td:first-child,
-.card-table tr th:first-child {
-    padding-left: 1.25rem
-}
-
-.card-table tr td:last-child,
-.card-table tr th:last-child {
-    padding-right: 1.25rem
-}
-
-.card-img-top {
-    height: 100%
-}
-.card {
-    margin-bottom: 1.5rem;
-    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,.025);
-    width: 100%;
-}
-
-.card {
-    position: relative;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid #e5e9f2;
-    border-radius: .2rem;
-    width: 100%;
-}
-
-.card-header:first-child {
-    border-radius: calc(.2rem - 1px) calc(.2rem - 1px) 0 0;
-}
-
-.card-header {
-    border-bottom-width: 1px;
-}
-.card-header {
-    padding: .75rem 1.25rem;
-    margin-bottom: 0;
-    color: inherit;
-    background-color: #fff;
-    border-bottom: 1px solid #e5e9f2;
-}
-
 </style>

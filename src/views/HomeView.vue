@@ -1,5 +1,5 @@
 <template>
-  <div class= "navbar">
+  <div class= "navbar navbar-home">
     <div>
       <h1>IronKanban</h1>
     </div>
@@ -8,7 +8,7 @@
   </div>
   </div>
   <div class="home">
-   <kanbanJobs class= "container1"></kanbanJobs>  </div>
+   <kanbanJobs class= "containerOne"></kanbanJobs>  </div>
 </template>
 
 <script>
@@ -40,21 +40,13 @@ export default {
 </script>
 <style>
 .home {
-  margin-left: 80px;
+  margin-left: 5%;
+  width: 90%;
+  margin-right: 5%;
 }
-.navbar {
- position:absolute;
+.navbar-home {
+ position: fixed;
  top: 0px;
- width: 100%;
-/* margin-left: 50px; */
- height: 50px;
- background-color: #2DC5FA;
- z-index: 289;
- display: flex;
- flex-direction: row;
- flex-wrap: wrap;
- justify-content: space-between;
-
 }
 .navbar div{
   color: white;
@@ -79,9 +71,8 @@ export default {
   border: 0px;
   margin-top: -8px;
 }
-.container1{
-  width: 100%;
+.containerOne{
+  width: 80%;
   position: relative;
-  top: -150px;
- }
+}
 </style>

@@ -5,7 +5,7 @@ TAMBIEN MODIFICAR El SIGN IN SIGN UP PARA PONERLO EN NAV BARS O SIMILARES
 hacer la letra del boton mas peque en la mediaquery
 -->
 <template>
-  <nav class= "navbar">
+  <nav class= "navbar navbar-auth">
     <div>
     <h1> IronKanban</h1>
   </div>
@@ -110,8 +110,6 @@ export default {
 </script>
 <style>
 .navbar {
- position:absolute;
- top: 0px;
  width: 100%;
 /* margin-left: 50px; */
  height: 50px;
@@ -121,7 +119,10 @@ export default {
  flex-direction: row;
  flex-wrap: wrap;
  justify-content: space-between;
-
+}
+.navbar-auth{
+  top: 0px;
+  position:absolute;
 }
 .navbar div{
   color: white;
@@ -157,7 +158,7 @@ export default {
   position: absolute;
   top: 53px;
   height: 100px;
-  width: 100vw;
+  width: 100%;
 display: flex;
 flex-direction: row;
 justify-content: flex-end;

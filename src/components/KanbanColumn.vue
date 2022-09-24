@@ -2,38 +2,49 @@
 <!-- eslint-disable vuejs-accessibility/alt-text -->
 <!-- eslint-disable max-len -->
 <template>
-   <div class="col-12 col-lg-6 col-xl-3">
+  <div class="col-12 col-lg-6 col-xl-3">
     <div class="card card-border-primary">
-                    <div class="card-header">
-          <form  @submit.prevent="handleModifyState(states[stateIndex], stateNameOut)">
-          <input v-model = "stateNameOut" :placeholder= "states[stateIndex]" class="state-data">
-          <input type="submit" value="Update">
-          </form>
-          <button @click="handleDeleteState">Delete State </button>
-           <div v-if="deleteTasks">
-              <modalButton :buttonModalText="popupText" @child-hide-event="childHide" ></modalButton>
+      <div class="card-header">
+        <div v-if="editState" class="edit-state">
+          <form @submit.prevent="handleModifyState(states[stateIndex], stateNameOut)">
+            <input v-model="stateNameOut" :placeholder="states[stateIndex]" />
+            <div>
+              <input type="submit" value=" " class="icon-action icon-save" />
+              <button @click="handleDeleteState" class="icon-action icon-delete"></button>
+              <button @click="editState = !editState" class="icon-action icon-edit"></button>
             </div>
-        <h2>{{states[stateIndex]}}</h2>
-      </div>
-    </div>
-        <div v-for="item in getTasksByState" :key="item.id" >
-    <!-- <h3>{{ index }} {{ item.state }}</h3> -->
-        <taskComp :taskId = "item.id" ></taskComp>
+          </form>
+          <div v-if="deleteTasks">
+            <modalButton :buttonModalText="popupText" @child-hide-event="childHide"></modalButton>
+          </div>
+        </div>
+        <div v-else class="edit-state">
+          <h2>{{ states[stateIndex] }}</h2>
+          <button @click="editState = !editState" class="icon-action icon-edit"></button>
         </div>
       </div>
-      <form  @submit.prevent="handleCreateTask" >
-      <div>
-        <label for="title">Title</label>
-        <input name="title" v-model="taskObject.title" placeholder="Insert your task name here">
-      </div>
-      <div>
-        <label for="estimate">estimation</label>
-        <input name="estimate" v-model.number="taskObject.estimate"
-        placeholder="Insert" type="number">
-      </div>
-        <input type="submit" value="Create Task"  class="btn btn-primary btn-block">
-    </form>
-
+    </div>
+    <div v-for="item in getTasksByState" :key="item.id">
+      <!-- <h3>{{ index }} {{ item.state }}</h3> -->
+      <taskComp :taskId="item.id"></taskComp>
+    </div>
+  </div>
+  <form @submit.prevent="handleCreateTask">
+    <div>
+      <label for="title">Title</label>
+      <input name="title" v-model="taskObject.title" placeholder="Insert your task name here" />
+    </div>
+    <div>
+      <label for="estimate">estimation</label>
+      <input
+        name="estimate"
+        v-model.number="taskObject.estimate"
+        placeholder="Insert"
+        type="number"
+      />
+    </div>
+    <input type="submit" value="Create Task" class="btn btn-primary btn-block" />
+  </form>
 </template>
 <script>
 import { mapState, mapActions } from 'pinia';
@@ -65,6 +76,8 @@ export default {
         user_id: '',
         subtasks: [],
       },
+      addTask: false,
+      editState: false,
     };
   },
   props: {
@@ -82,9 +95,13 @@ export default {
     ...mapActions(taskStore, ['createTask', 'updateTasksWhenDeleteingState']),
     ...mapActions(userStore, ['modifyState', 'createState', 'fetchStates', 'deleteState']),
     handleModifyState(stateIn, stateOut) {
-      console.log(stateIn, stateOut);
-      this.modifyState(stateIn, stateOut);
-      this.stateName = this.stateNameOut;
+      if (stateOut === '' || !stateOut.length);
+      else {
+        console.log(stateIn, stateOut);
+        this.modifyState(stateIn, stateOut);
+        this.stateName = this.stateNameOut;
+        this.editState = false;
+      }
     },
     handleDeleteState() {
       console.log(this.stateName);
@@ -92,8 +109,9 @@ export default {
         this.deleteState(this.stateName);
         this.updateTasksWhenDeleteingState(this.stateIndex);
         this.stateName = this.states[this.stateIndex];
+        this.editState = false;
       } else {
-        console.log('please delete tasks in the state first');
+        console.log('Please delete tasks in the state first');
         this.deleteTasks = true;
       }
     },
@@ -114,164 +132,210 @@ export default {
     this.stateIndex = this.indexNumber;
   },
 };
-
 </script>
 
 <style>
-  .task_data{
-    border: 0px;
-    width: 200px;
-  }
-  .kanban_container{
-    display: flex;
-    flex-direction: row;
-    align-items:stretch;
-    justify-content:space-between;
-    width: 100vw;
-  }
-  .state-column{
-    width: 400px;
-    }
-  .state-data{
-    border: 0px;
-    width: 200px;
-    font-size: 25px;
-    color: black;
-    font-weight: bold;
-  }
-  ::placeholder {
-    color: black;
-    opacity: 1;
-  }
-  .card.draggable {
-    margin-bottom: 1rem;
-    cursor: grab;
+.task_data {
+  border: 0px;
+  width: 200px;
+}
+.kanban_container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  width: 100vw;
+}
+.state-column {
+  width: 400px;
+}
+.state-data {
+  border: 0px;
+  width: 200px;
+  font-size: 25px;
+  color: black;
+  font-weight: bold;
+}
+::placeholder {
+  color: black;
+  opacity: 1;
+}
+.card.draggable {
+  margin-bottom: 1rem;
+  cursor: grab;
 }
 
 .droppable {
-    background-color: var(--success);
-    min-height: 120px;
-    margin-bottom: 1rem;
+  background-color: var(--success);
+  min-height: 120px;
+  margin-bottom: 1rem;
 }
 
 .card {
-    margin-bottom: 1.5rem;
-    box-shadow: 0 .25rem .5rem rgba(0, 0, 0, .025)
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.025);
 }
 
 .card-border-primary {
-    border-top: 4px solid #2979ff
+  border-top: 4px solid #2979ff;
 }
 
 .card-border-secondary {
-    border-top: 4px solid #efefef
+  border-top: 4px solid #efefef;
 }
 
 .card-border-success {
-    border-top: 4px solid #00c853
+  border-top: 4px solid #00c853;
 }
 
 .card-border-info {
-    border-top: 4px solid #3d5afe
+  border-top: 4px solid #3d5afe;
 }
 
 .card-border-warning {
-    border-top: 4px solid #ff9100
+  border-top: 4px solid #ff9100;
 }
 
 .card-border-danger {
-    border-top: 4px solid #ff1744
+  border-top: 4px solid #ff1744;
 }
 
 .card-border-light {
-    border-top: 4px solid #f8f9fa
+  border-top: 4px solid #f8f9fa;
 }
 
 .card-border-dark {
-    border-top: 4px solid #6c757d
+  border-top: 4px solid #6c757d;
 }
 
 .card-header {
-    border-bottom-width: 1px
+  border-bottom-width: 1px;
 }
 
 .card-actions a {
-    color: #495057;
-    text-decoration: none
+  color: #495057;
+  text-decoration: none;
 }
 
 .card-actions svg {
-    width: 16px;
-    height: 16px
+  width: 16px;
+  height: 16px;
 }
 
 .card-actions .dropdown {
-    line-height: 1.4
+  line-height: 1.4;
 }
 
 .card-title {
-    font-weight: 500;
-    margin-top: .1rem
+  font-weight: 500;
+  margin-top: 0.1rem;
 }
 
 .card-subtitle {
-    font-weight: 400
+  font-weight: 400;
 }
 
 .card-table {
-    margin-bottom: 0
+  margin-bottom: 0;
 }
 
 .card-table tr td:first-child,
 .card-table tr th:first-child {
-    padding-left: 1.25rem
+  padding-left: 1.25rem;
 }
 
 .card-table tr td:last-child,
 .card-table tr th:last-child {
-    padding-right: 1.25rem
+  padding-right: 1.25rem;
 }
 
 .card-img-top {
-    height: 100%
+  height: 100%;
 }
 .card {
-    margin-bottom: 1.5rem;
-    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,.025);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.025);
 }
 
 .card {
-    position: relative;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid #e5e9f2;
-    border-radius: .2rem;
-    width: 100%;
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid #e5e9f2;
+  border-radius: 0.2rem;
+  width: 100%;
+  width: 400px;
 }
 
 .card-header:first-child {
-    border-radius: calc(.2rem - 1px) calc(.2rem - 1px) 0 0;
+  border-radius: calc(0.2rem - 1px) calc(0.2rem - 1px) 0 0;
 }
 
 .card-header {
-    border-bottom-width: 1px;
-}
-.card-header {
-    padding: .75rem 1.25rem;
-    margin-bottom: 0;
-    color: inherit;
-    background-color: #fff;
-    border-bottom: 1px solid #e5e9f2;
-    width: 100%;
-}
-.col-12, .col-lg-6, .col-xl-3{
+  border-bottom-width: 1px;
   width: 100%;
 }
-
+.card-header {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  color: inherit;
+  background-color: #fff;
+  border-bottom: 1px solid #e5e9f2;
+  width: 100%;
+}
+.col-12,
+.col-lg-6,
+.col-xl-3 {
+  width: 100%;
+}
+.icon-action {
+  height: 20px;
+  width: 20px;
+  background-size: cover;
+  border: 0px;
+}
+.icon-action:hover {
+  background-color: darkgray;
+}
+.icon-save {
+  background-image: url("../../images/Noun_Project_Save_Icon_1527077.svg");
+}
+.icon-edit {
+  background-image: url("../../images/edit_modify_icon-icons.com_72390.png");
+}
+.icon-delete {
+  background-image: url("../../images/icons8-delete-48.png");
+}
+.edit-state {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  min-height: 46px;
+  flex: 1 1;
+}
+.edit-state form {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+}
+.edit-state form div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+}
+.edit-state div button {
+  display: inline;
+}
+.edit-state div h2 {
+  display: inline;
+}
 </style>
