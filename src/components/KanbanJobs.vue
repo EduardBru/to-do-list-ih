@@ -4,24 +4,29 @@
 meter las create tarea en cada columna
 Hacer mediaquery para que las columnas sean en column no en row-->
 <template>
-<main>
-      <form  @submit.prevent="handleCreateState" class="create-state-form" >
-        <div>
-        <input name="title" v-model="newState" placeholder="Insert your new State here" class="no-border-input">
+  <main>
+    <form @submit.prevent="handleCreateState" class="create-state-form">
+      <div>
+        <input
+          name="title"
+          v-model="newState"
+          placeholder="Insert your new State here"
+          class="no-border-input"
+        />
       </div>
       <div>
-    <input type="submit" value="Create State" class="btn btn-primary btn-block">
-  </div>
-  </form>
+        <input type="submit" value="Create State" class="btn btn-primary btn-block" />
+      </div>
+    </form>
     <div v-if="wrongState">
-      <modalButton :buttonModalText="wrongStateText" @child-hide-event="childHide" ></modalButton>
+      <modalButton :buttonModalText="wrongStateText" @child-hide-event="childHide"></modalButton>
     </div>
-     <div class="kanban_container">
-    <div v-for="(stateData, index) in states" :key="index" class="state-column state-overflow">
-    <kanbanColumn :stateData = "stateData" :indexNumber="parseInt(index)"></kanbanColumn>
+    <div class="kanban_container">
+      <div v-for="(stateData, index) in states" :key="index" class="state-column state-overflow">
+        <kanbanColumn :stateData="stateData" :indexNumber="parseInt(index)"></kanbanColumn>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 </template>
 
 <script>
@@ -97,42 +102,42 @@ export default {
 </script>
 
 <style>
-  .task_data{
-    border: 0px;
-    width: 200px;
-  }
-  .kanban_container{
-    display: flex;
-    flex-direction: row;
-    justify-content:space-between;
-    width: 100%;
-    gap: 20px;
-  }
-  .state-column{
-    width:  fit-content;
-    height: fit-content;
-    padding: 10px;
-    background-color: lightgrey;
-  }
-  .state-data{
-    border: 0px;
-    width: 200px;
-    font-size: 25px;
-    color: black;
-    font-weight: bold;
-  }
-  ::placeholder {
-    color: black;
-    opacity: 1;
-  }
-  body{
-    background: #fafafa
+.task_data {
+  border: 0px;
+  width: 200px;
+}
+.kanban_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
+.state-column {
+  width: fit-content;
+  height: fit-content;
+  padding: 10px;
+  background-color: lightgrey;
+}
+.state-data {
+  border: 0px;
+  width: 200px;
+  font-size: 25px;
+  color: black;
+  font-weight: bold;
+}
+::placeholder {
+  color: black;
+  opacity: 1;
+}
+body {
+  background: #fafafa;
 }
 .btn {
-  background-color: #2DC5FA;
-  border-color: #2DC5FA;
+  background-color: #2dc5fa;
+  border-color: #2dc5fa;
 }
-.create-state-form{
+.create-state-form {
   border: 0px;
   display: flex;
   gap: 20px;

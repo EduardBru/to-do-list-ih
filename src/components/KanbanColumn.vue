@@ -29,21 +29,33 @@
       <taskComp :taskId="item.id"></taskComp>
     </div>
   </div>
-  <form @submit.prevent="handleCreateTask">
+  <form @submit.prevent="handleCreateTask" class="create-task-container">
     <div>
+    <div class= "create-task-form">
+      <div>
       <label for="title">Title</label>
+    </div>
+    <div>
       <input name="title" v-model="taskObject.title" placeholder="Insert your task name here" />
     </div>
-    <div>
-      <label for="estimate">estimation</label>
-      <input
-        name="estimate"
+    </div>
+    <div class= "create-task-form">
+      <div>
+        Estimation
+      </div>
+      <div>
+      <label for="estimate"> </label>
+       <input name="estimate"
         v-model.number="taskObject.estimate"
         placeholder="Insert"
-        type="number"
+        type="number" class="placeholder-small"
       />
     </div>
+    </div>
+  </div>
+  <div>
     <input type="submit" value="Create Task" class="btn btn-primary btn-block" />
+  </div>
   </form>
 </template>
 <script>
@@ -147,7 +159,7 @@ export default {
   width: 100vw;
 }
 .state-column {
-  width: 400px;
+  width: fit-content;
 }
 .state-data {
   border: 0px;
@@ -337,5 +349,16 @@ export default {
 }
 .edit-state div h2 {
   display: inline;
+}
+.create-task-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.create-task-form{
+  display: flex;
+  width: 120%;
+  flex-direction: row;
+  justify-content: space-between;
 }
 </style>
