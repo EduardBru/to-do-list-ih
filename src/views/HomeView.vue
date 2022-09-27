@@ -6,7 +6,7 @@
     <div class="homebtn">
     <button @click="handleSignOut" class="signout-button">Sign Out </button>
   </div>
-  </div>
+</div>
   <div class="home">
    <kanbanJobs class= "containerOne"></kanbanJobs>  </div>
 </template>
@@ -45,16 +45,20 @@ export default {
   margin-right: 5%;
 }
 .navbar-home {
+  width: 100%;
  position: fixed;
  top: 0px;
 }
-.navbar div{
+.navbar-div{
+  max-width: 100vw;
+}
+.navbar div div{
   color: white;
   height: 100%;
   width: 50%;
   min-width: 150px;
 }
-.navbar div h1{
+.navbar div div h1{
   margin: 0px 0px 0px 50px;
 }
 .homebtn{

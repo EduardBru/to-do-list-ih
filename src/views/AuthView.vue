@@ -134,7 +134,7 @@ export default {
   margin: 0px 0px 0px 50px;
 }
 .homebtn{
-  width: 40%;
+  width: 50%;
   min-width: 150px;
   gap: 10px;
   display: flex;
@@ -144,7 +144,7 @@ export default {
   color: white;
   background-color: #666;
   height: 50px;
-  width: 30%;
+  width: 40%;
   min-width: 70px;
   font-size: 24px;
   border: 0px;

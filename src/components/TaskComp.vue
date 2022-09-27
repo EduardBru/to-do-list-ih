@@ -98,10 +98,14 @@
         </div>
         <br>
       </div>
-        <form @submit.prevent="handleCreateSubTask(taskObject.id)">
+        <form @submit.prevent="handleCreateSubTask(taskObject.id)" class="create-subtask">
+          <div>
           <label for="title"></label>
           <input name="title" v-model="subTaskObject.subtask_name" placeholder="Insert subtask" />
-          <input type="submit" value="Create SubTask" />
+        </div>
+        <div class="subtasks-form-buttons">
+          <input type="submit" value=" " class="icon-action icon-save" />
+        </div>
         </form>
     </div>
   </div>
@@ -265,11 +269,19 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  gap: 5px;
 }
 .subtasks-flex {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 6px;
+}
+.create-subtask{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 10px;
+  justify-content: space-between;
 }
 </style>

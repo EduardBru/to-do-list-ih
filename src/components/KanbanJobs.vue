@@ -17,7 +17,7 @@ Hacer mediaquery para que las columnas sean en column no en row-->
       <modalButton :buttonModalText="wrongStateText" @child-hide-event="childHide" ></modalButton>
     </div>
      <div class="kanban_container">
-    <div v-for="(stateData, index) in states" :key="index" class="state-column ">
+    <div v-for="(stateData, index) in states" :key="index" class="state-column state-overflow">
     <kanbanColumn :stateData = "stateData" :indexNumber="parseInt(index)"></kanbanColumn>
     </div>
   </div>
@@ -109,7 +109,7 @@ export default {
     gap: 20px;
   }
   .state-column{
-    width: fit-content;
+    width:  fit-content;
     height: fit-content;
     padding: 10px;
     background-color: lightgrey;
@@ -136,7 +136,7 @@ export default {
   border: 0px;
   display: flex;
   gap: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 11px;
 }
 .no-border-input {
   padding-top: 10px;

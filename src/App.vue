@@ -40,7 +40,7 @@ export default {
 <style>
 .back-ground{
   width: 100vw;
-  height: 100vh;
+  height: 200vh;
   margin-top: 100px;
   background-size: cover;
   background-image: url("https://cdn-images-1.medium.com/max/1200/1*69RcxrWXuk385lSxkIYYLA.png");
