@@ -5,7 +5,7 @@ TAMBIEN MODIFICAR El SIGN IN SIGN UP PARA PONERLO EN NAV BARS O SIMILARES
 hacer la letra del boton mas peque en la mediaquery
 -->
 <template>
-  <nav class= "navbar navbar-auth">
+  <nav class= "navbar2 navbar-auth">
     <div>
     <h1> IronKanban</h1>
   </div>
@@ -91,7 +91,6 @@ export default {
     childHide() {
       this.failedLog = false;
       this.popupText = '';
-      console.log('entro aqui');
     },
   },
   watch: {
@@ -109,8 +108,8 @@ export default {
 };
 </script>
 <style>
-.navbar {
- width: 100%;
+.navbar2 {
+ width: 100vw;
 /* margin-left: 50px; */
  height: 50px;
  background-color: #2DC5FA;
@@ -124,14 +123,11 @@ export default {
   top: 0px;
   position:absolute;
 }
-.navbar div{
+.navbar2 div{
   color: white;
   height: 100%;
   width: 50%;
   min-width: 150px;
-}
-.navbar div h1{
-  margin: 0px 0px 0px 50px;
 }
 .homebtn{
   width: 50%;
@@ -143,12 +139,13 @@ export default {
 .homebtn button{
   color: white;
   background-color: #666;
-  height: 50px;
+  height: 58px;
   width: 40%;
-  min-width: 70px;
+  min-width: 100px;
   font-size: 24px;
   border: 0px;
   margin-top: -8px;
+  padding-top: 8px;
 }
 .homebtn button:hover {
   background-color: grey; /* Green */

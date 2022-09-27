@@ -159,22 +159,16 @@ export default {
       this.editTask = false;
     },
     handleCreateSubTask(taskId) {
-      this.subTaskObject.user_id = this.user.id;
-      this.subTaskObject.task = taskId;
-      this.createSubTask(this.subTaskObject, taskId);
-      this.subTaskObject = { ...defaultSubTask };
-      this.editTask = false;
+      if (this.subTaskObject.title.subtask_name === '') {
+        console.log('empty subtask');
+      } else {
+        this.subTaskObject.user_id = this.user.id;
+        this.subTaskObject.task = taskId;
+        this.createSubTask(this.subTaskObject, taskId);
+        this.subTaskObject = { ...defaultSubTask };
+        this.editTask = false;
+      }
     },
-    // getSubtaskById(subtaskId) {
-    //   if (typeof subtaskId === 'number') {
-    //     const localSubtask = this.subtasks.filter((subtask) => subtask.id === subtaskId);
-    //     this.subTaskObject.subtask_name = localSubtask[0].subtask_name;
-    //     this.subTaskObject.is_completed = localSubtask[0].is_completed;
-    //     console.log(localSubtask);
-    //     return localSubtask;
-    //   }
-    //   return null;
-    // },
     handleDeleteSubTask(taskId, subtaskId) {
       this.deleteSubTask(taskId, subtaskId);
     },

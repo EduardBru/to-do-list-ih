@@ -45,7 +45,6 @@ export default defineStore('user', {
         password,
       });
       if (error) {
-        console.log('problemitaaaa');
         console.log(error.message);
         throw error;
       }
@@ -79,10 +78,8 @@ export default defineStore('user', {
     },
     async deleteState(stateIn) {
       const statePosition = this.states.indexOf(stateIn.toString());
-      console.log(statePosition);
       const statesArray = this.states;
       statesArray.splice(statePosition, 1);
-      console.log(statesArray);
       await this.updateStates(statesArray);
     },
 

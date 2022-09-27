@@ -1,13 +1,13 @@
 <template>
-  <div class= "navbar navbar-home">
+  <div class= "navbar2 navbar-home">
     <div>
       <h1>IronKanban</h1>
     </div>
     <div class="homebtn">
-    <button @click="handleSignOut" class="signout-button">Sign Out </button>
+    <button @click="handleSignOut" id="signout-button">Sign Out </button>
   </div>
 </div>
-  <div class="home">
+  <div class="home rotate-content">
    <kanbanJobs class= "containerOne"></kanbanJobs>  </div>
 </template>
 
@@ -43,6 +43,8 @@ export default {
   margin-left: 5%;
   width: 90%;
   margin-right: 5%;
+  overflow-x: scroll;
+  height: fit-content;
 }
 .navbar-home {
   width: 100%;
@@ -52,28 +54,21 @@ export default {
 .navbar-div{
   max-width: 100vw;
 }
-.navbar div div{
+.navbar2 div {
   color: white;
   height: 100%;
   width: 50%;
   min-width: 150px;
 }
-.navbar div div h1{
-  margin: 0px 0px 0px 50px;
+.navbar2 div h1{
+  margin: 5px 0px 0px 50px;
 }
 .homebtn{
   display: flex;
   justify-content: flex-end;
 }
-.signout-button{
-  color: white;
-  background-color: #666;
-  height: 50px;
-  width: 30%;
-  min-width: 100px;
-  font-size: 24px;
-  border: 0px;
-  margin-top: -8px;
+#signout-button{
+  min-width: 140px;
 }
 .containerOne{
   width: 80%;

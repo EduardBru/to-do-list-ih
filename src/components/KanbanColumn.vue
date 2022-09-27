@@ -70,6 +70,7 @@ const defaultData = {
   estimate: 0,
   state: 0,
   user_id: '',
+  subtasks: [],
 };
 export default {
   name: 'kanbanColumn',
@@ -109,27 +110,23 @@ export default {
     handleModifyState(stateIn, stateOut) {
       if (stateOut === '' || !stateOut.length);
       else {
-        console.log(stateIn, stateOut);
         this.modifyState(stateIn, stateOut);
         this.stateName = this.stateNameOut;
         this.editState = false;
       }
     },
     handleDeleteState() {
-      console.log(this.stateName);
       if (this.getTasksByState.length === 0) {
         this.deleteState(this.stateName);
         this.updateTasksWhenDeleteingState(this.stateIndex);
         this.stateName = this.states[this.stateIndex];
         this.editState = false;
       } else {
-        console.log('Please delete tasks in the state first');
         this.deleteTasks = true;
       }
     },
     childHide() {
       this.deleteTasks = false;
-      console.log('entro aqui');
     },
     handleCreateTask() {
       this.taskObject.user_id = this.user.id;
@@ -172,17 +169,6 @@ export default {
   color: black;
   opacity: 1;
 }
-.card.draggable {
-  margin-bottom: 1rem;
-  cursor: grab;
-}
-
-.droppable {
-  background-color: var(--success);
-  min-height: 120px;
-  margin-bottom: 1rem;
-}
-
 .card {
   margin-bottom: 1.5rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.025);
@@ -224,46 +210,6 @@ export default {
   border-bottom-width: 1px;
 }
 
-.card-actions a {
-  color: #495057;
-  text-decoration: none;
-}
-
-.card-actions svg {
-  width: 16px;
-  height: 16px;
-}
-
-.card-actions .dropdown {
-  line-height: 1.4;
-}
-
-.card-title {
-  font-weight: 500;
-  margin-top: 0.1rem;
-}
-
-.card-subtitle {
-  font-weight: 400;
-}
-
-.card-table {
-  margin-bottom: 0;
-}
-
-.card-table tr td:first-child,
-.card-table tr th:first-child {
-  padding-left: 1.25rem;
-}
-
-.card-table tr td:last-child,
-.card-table tr th:last-child {
-  padding-right: 1.25rem;
-}
-
-.card-img-top {
-  height: 100%;
-}
 .card {
   margin-bottom: 1.5rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.025);
