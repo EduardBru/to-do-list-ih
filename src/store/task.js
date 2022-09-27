@@ -43,7 +43,6 @@ export default defineStore('tasks', {
         subtaksOfTask.forEach((element) => {
           const deleteSubtaskProm = this.deleteSubTask(taskId, element.id);
           promises.push(deleteSubtaskProm);
-          // console.log('elementos', element.id);
         });
         Promise.all(promises).then(async () => {
           this.deleteFinalTask(taskId);
@@ -118,7 +117,6 @@ export default defineStore('tasks', {
           const disposableTask = element;
           disposableTask.state -= 1;
           this.updateTask(element.id, disposableTask);
-          console.log('task state updated from', element.state, 'to', disposableTask.state);
         }
       });
     },

@@ -26,23 +26,13 @@ export default {
   methods: {
     hide() {
       this.$emit('child-hide-event');
-      console.log('hiding event');
     },
   },
 };
 </script>
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "montserrat", sans-serif;
-}
-
 #app2 {
+  box-sizing: border-box;
   position: relative;
   display: flex;
   justify-content: center;
@@ -84,8 +74,8 @@ body {
 
 .modal1 {
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 300px;
+  left: 50vw;
   transform: translate(-50%, -50%);
   z-index: 99400;
   width: 800px;

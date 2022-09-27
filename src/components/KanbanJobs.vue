@@ -4,7 +4,7 @@
 meter las create tarea en cada columna
 Hacer mediaquery para que las columnas sean en column no en row-->
 <template>
-  <main>
+  <main class="overflow-class">
     <form @submit.prevent="handleCreateState" class="create-state-form">
       <div>
         <input
@@ -74,10 +74,8 @@ export default {
     },
     handleCreateState() {
       if (!this.newState) {
-        console.log('cannot create an empty state');
         this.wrongState = true;
       } else if (this.newState.length === 0) {
-        console.log('cannot create an empty state');
         this.wrongState = true;
       } else {
         this.createState(this.newState);
@@ -86,7 +84,6 @@ export default {
     },
     childHide() {
       this.wrongState = false;
-      console.log('entro aqui');
     },
   },
 
@@ -147,5 +144,17 @@ body {
   padding-top: 10px;
   border: 0px;
   background-color: transparent;
+}
+.overflow-class{
+  width: 100vw;
+  height: fit-content;
+  transform:rotateX(180deg);
+    -ms-transform:rotateX(180deg); /* IE 9 */
+    -webkit-transform:rotateX(180deg); /* Safari and Chrome */
+    direction: ltr;
+    min-height: 700px;
+}
+.rotate-content{
+  transform:rotateX(180deg);
 }
 </style>
