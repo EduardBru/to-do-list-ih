@@ -280,7 +280,8 @@ export default {
 .create-subtask{
   display: flex;
   flex-direction: row;
-  width: 100%;
+  width: 95%;
+  margin-left: 5%;
   gap: 10px;
   justify-content: space-between;
 }
