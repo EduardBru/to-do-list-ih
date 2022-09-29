@@ -1,13 +1,13 @@
 <template>
   <div class="back-ground">
-  <nav v-if="user !== null">
-   <router-link to="/"></router-link>
-   </nav>
-  <router-view/> <!-- your routes will load inside of these tags -->
-</div>
+    <nav v-if="user !== null">
+      <router-link to="/"></router-link>
+    </nav>
+    <router-view />
+  </div>
 </template>
 
-<script >
+<script>
 import userStore from '@/store/user';
 import { mapState, mapActions } from 'pinia';
 
@@ -21,13 +21,11 @@ export default {
   },
   async created() {
     try {
-      await this.fetchUser(); // here we call fetch user
+      await this.fetchUser();
       console.log(this.user);
       if (!this.user) {
-      // redirect them to logout if the user is not there
         this.$router.push({ path: '/auth' });
       } else {
-      // continue to dashboard
         this.$router.push({ path: '/' });
       }
     } catch (e) {
@@ -38,7 +36,7 @@ export default {
 </script>
 
 <style>
-.back-ground{
+.back-ground {
   width: 100vw;
   height: 200vh;
   margin-top: 100px;

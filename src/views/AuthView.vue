@@ -1,48 +1,41 @@
-<!-- eslint-disable vuejs-accessibility/label-has-for
-HAY QUE PREGUNTAR A LOS PROFES COMO APAÑAR ESTO!!! Y PONER REGLAS PARA
-DETECCION DE FORMATOS AL ESCRIBIR
-TAMBIEN MODIFICAR El SIGN IN SIGN UP PARA PONERLO EN NAV BARS O SIMILARES
-hacer la letra del boton mas peque en la mediaquery
--->
+<!-- eslint-disable vuejs-accessibility/label-has-for-->
 <template>
-  <nav class= "navbar2 navbar-auth">
+  <nav class="navbar2 navbar-auth">
     <div>
-    <h1> IronKanban</h1>
-  </div>
-  <div class="homebtn">
-    <button @click="signUpBool=!signUpBool, signInBool=false" >
-      Sign Up </button>
-    <button @click="signUpBool=false, signInBool=!signInBool" >
-    Sign In </button>
-     </div>
-    </nav>
-     <div class="input-creds">
-    <form  v-show="signUpBool == true" @submit.prevent="handleSignUp"  class="form-container">
-      <div>
-        <label for="email"></label>
-        <input name="email" v-model="email" placeholder="email">
-      </div>
-      <div>
-        <label for="password"></label>
-        <input name="password" v-model="password" placeholder="password" type="password">
-      </div>
-      <input type="submit" value="sign up" class="btn btn-primary btn-block">
-    </form>
-    <form  v-show="signInBool == true" @submit.prevent="handleSignIn" class="form-container">
-      <div>
-        <label for="email"></label>
-        <input name="email" v-model="email" placeholder="email">
-      </div>
-      <div>
-        <label for="password"></label>
-        <input name="password" v-model="password" placeholder="password" type="password">
-      </div>
-      <input type="submit" value="sign In" class="btn btn-primary btn-block">
-    </form>
-  </div>
-    <div v-if="failedLog">
-      <modalButton :buttonModalText="popupText" @child-hide-event="childHide" ></modalButton>
+      <h1>IronKanban</h1>
     </div>
+    <div class="homebtn">
+      <button @click="(signUpBool = !signUpBool), (signInBool = false)">Sign Up</button>
+      <button @click="(signUpBool = false), (signInBool = !signInBool)">Sign In</button>
+    </div>
+  </nav>
+  <div class="input-creds">
+    <form v-show="signUpBool == true" @submit.prevent="handleSignUp" class="form-container">
+      <div>
+        <label for="email"></label>
+        <input name="email" v-model="email" placeholder="email" />
+      </div>
+      <div>
+        <label for="password"></label>
+        <input name="password" v-model="password" placeholder="password" type="password" />
+      </div>
+      <input type="submit" value="sign up" class="btn btn-primary btn-block" />
+    </form>
+    <form v-show="signInBool == true" @submit.prevent="handleSignIn" class="form-container">
+      <div>
+        <label for="email"></label>
+        <input name="email" v-model="email" placeholder="email" />
+      </div>
+      <div>
+        <label for="password"></label>
+        <input name="password" v-model="password" placeholder="password" type="password" />
+      </div>
+      <input type="submit" value="sign In" class="btn btn-primary btn-block" />
+    </form>
+  </div>
+  <div v-if="failedLog">
+    <modalButton :buttonModalText="popupText" @child-hide-event="childHide"></modalButton>
+  </div>
 </template>
 
 <script>
@@ -71,19 +64,17 @@ export default {
     async handleSignUp() {
       try {
         await this.signUp(this.email, this.password);
-        // test code
-      } catch (error) { // if error
+      } catch (error) {
         this.popupText = error.message;
         this.failedLog = true;
-        console.error(error); // return error
+        console.error(error);
       }
     },
     async handleSignIn() {
       try {
         await this.signIn(this.email, this.password);
-        // test code
-      } catch (error) { // if error
-        console.error(error.message); // return error
+      } catch (error) {
+        console.error(error.message);
         this.popupText = error.message;
         this.failedLog = true;
       }
@@ -109,34 +100,33 @@ export default {
 </script>
 <style>
 .navbar2 {
- width: 100vw;
-/* margin-left: 50px; */
- height: 50px;
- background-color: #2DC5FA;
- z-index: 289;
- display: flex;
- flex-direction: row;
- flex-wrap: wrap;
- justify-content: space-between;
+  width: 100vw;
+  height: 50px;
+  background-color: #2dc5fa;
+  z-index: 289;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
-.navbar-auth{
+.navbar-auth {
   top: 0px;
-  position:absolute;
+  position: absolute;
 }
-.navbar2 div{
+.navbar2 div {
   color: white;
   height: 100%;
   width: 50%;
   min-width: 150px;
 }
-.homebtn{
+.homebtn {
   width: 50%;
   min-width: 150px;
   gap: 10px;
   display: flex;
   justify-content: flex-end;
 }
-.homebtn button{
+.homebtn button {
   color: white;
   background-color: #666;
   height: 58px;
@@ -148,21 +138,21 @@ export default {
   padding-top: 8px;
 }
 .homebtn button:hover {
-  background-color: grey; /* Green */
+  background-color: grey;
   color: white;
 }
-.input-creds{
+.input-creds {
   position: absolute;
   top: 53px;
   height: 100px;
   width: 100%;
-display: flex;
-flex-direction: row;
-justify-content: flex-end;
-gap: 20px;
-padding-right: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 20px;
+  padding-right: 10%;
 }
-.form-container{
+.form-container {
   display: flex;
   flex-direction: column;
   gap: 2px;

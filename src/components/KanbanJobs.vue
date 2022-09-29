@@ -1,8 +1,6 @@
 <!-- eslint-disable max-len -->
 <!-- eslint-disable vuejs-accessibility/form-control-has-label -->
-<!-- eslint-disable vuejs-accessibility/label-has-for
-meter las create tarea en cada columna
-Hacer mediaquery para que las columnas sean en column no en row-->
+<!-- eslint-disable vuejs-accessibility/label-has-for-->
 <template>
   <main class="overflow-class">
     <form @submit.prevent="handleCreateState" class="create-state-form">
@@ -89,8 +87,8 @@ export default {
 
   async created() {
     try {
-      await this.fetchTasks(); // here we call fetch tasks
-      await this.fetchStates(); // here we call fetch states
+      await this.fetchTasks();
+      await this.fetchStates();
     } catch (e) {
       console.log(e);
     }
@@ -145,16 +143,16 @@ body {
   border: 0px;
   background-color: transparent;
 }
-.overflow-class{
+.overflow-class {
   width: 100vw;
   height: fit-content;
-  transform:rotateX(180deg);
-    -ms-transform:rotateX(180deg); /* IE 9 */
-    -webkit-transform:rotateX(180deg); /* Safari and Chrome */
-    direction: ltr;
-    min-height: 700px;
+  transform: rotateX(180deg);
+  -ms-transform: rotateX(180deg); /* IE 9 */
+  -webkit-transform: rotateX(180deg); /* Safari and Chrome */
+  direction: ltr;
+  min-height: 700px;
 }
-.rotate-content{
-  transform:rotateX(180deg);
+.rotate-content {
+  transform: rotateX(180deg);
 }
 </style>
