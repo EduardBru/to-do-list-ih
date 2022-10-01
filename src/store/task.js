@@ -103,7 +103,6 @@ export default defineStore('tasks', {
     async updateSubTask(subtaskId, subtaskData) {
       const { error } = await supabase
         .from('subtasks')
-        // eslint-disable-next-line max-len, object-curly-newline
         .update({ subtask_name: subtaskData.subtask_name, is_completed: subtaskData.is_completed })
         .match({ id: subtaskId });
       if (error) throw error;
@@ -120,12 +119,5 @@ export default defineStore('tasks', {
         }
       });
     },
-    // async fetchSubTasks() {
-    //   const { data } = await supabase
-    //     .from('subtasks')
-    //     .select('*')
-    //     .order('id', { ascending: true });
-    //   this.subtasks = data;
-    // },
   },
 });

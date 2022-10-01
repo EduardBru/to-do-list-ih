@@ -1,19 +1,20 @@
 <template>
-  <div class= "navbar2 navbar-home">
+  <div class="navbar2 navbar-home">
     <div>
       <h1>IronKanban</h1>
     </div>
     <div class="homebtn">
-    <button @click="handleSignOut" id="signout-button">Sign Out </button>
+      <button @click="handleSignOut" id="signout-button">Sign Out</button>
+    </div>
   </div>
-</div>
   <div class="home rotate-content">
-   <kanbanJobs class= "containerOne"></kanbanJobs>  </div>
+    <kanbanJobs class="containerOne"></kanbanJobs>
+  </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'pinia';
-import userStore from '@/store/user';// @ is an alias to /src
+import userStore from '@/store/user'; // @ is an alias to /src
 import kanbanJobs from '@/components/KanbanJobs.vue';
 
 export default {
@@ -48,10 +49,10 @@ export default {
 }
 .navbar-home {
   width: 100%;
- position: fixed;
- top: 0px;
+  position: fixed;
+  top: 0px;
 }
-.navbar-div{
+.navbar-div {
   max-width: 100vw;
 }
 .navbar2 div {
@@ -60,17 +61,17 @@ export default {
   width: 50%;
   min-width: 150px;
 }
-.navbar2 div h1{
+.navbar2 div h1 {
   margin: 5px 0px 0px 50px;
 }
-.homebtn{
+.homebtn {
   display: flex;
   justify-content: flex-end;
 }
-#signout-button{
+#signout-button {
   min-width: 140px;
 }
-.containerOne{
+.containerOne {
   width: 80%;
   position: relative;
 }

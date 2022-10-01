@@ -1,11 +1,6 @@
 <!-- eslint-disable max-len -->
 <!-- eslint-disable vuejs-accessibility/form-control-has-label -->
-<!-- eslint-disable vuejs-accessibility/label-has-for
- Task and subtasks go here
- Pasar una prop y hacer get task by Id en el created y asi simplificar
- mucho el codigo y evitar pasar props grandes
- IDEA HACER LOS BOTONES DE MODIFICAR INVISIBLE Y SUSTITUIR LOS CREATE POR UN +
--->
+<!-- eslint-disable vuejs-accessibility/label-has-for-->
 <template>
   <div class="card card-border-primary">
     <div class="card-header">
@@ -96,17 +91,17 @@
             </form>
           </div>
         </div>
-        <br>
+        <br />
       </div>
-        <form @submit.prevent="handleCreateSubTask(taskObject.id)" class="create-subtask">
-          <div>
+      <form @submit.prevent="handleCreateSubTask(taskObject.id)" class="create-subtask" >
+        <div>
           <label for="title"></label>
           <input name="title" v-model="subTaskObject.subtask_name" placeholder="Insert subtask" />
         </div>
         <div class="subtasks-form-buttons">
           <input type="submit" value=" " class="icon-action icon-save" />
         </div>
-        </form>
+      </form>
     </div>
   </div>
 </template>
@@ -159,7 +154,7 @@ export default {
       this.editTask = false;
     },
     handleCreateSubTask(taskId) {
-      if (this.subTaskObject.title.subtask_name === '') {
+      if (this.subTaskObject.subtask_name === '') {
         console.log('empty subtask');
       } else {
         this.subTaskObject.user_id = this.user.id;
@@ -177,11 +172,6 @@ export default {
     },
   },
   async created() {
-    try {
-      // await this.fetchSubTasks(); // here we call fetch subtasks
-    } catch (e) {
-      console.log(e);
-    }
     this.taskObject = { ...this.getTaskById(this.taskId)[0] };
   },
 };
@@ -271,7 +261,7 @@ export default {
   justify-content: space-between;
   gap: 6px;
 }
-.create-subtask{
+.create-subtask {
   display: flex;
   flex-direction: row;
   width: 95%;
